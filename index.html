@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="node_modules/onsenui/css/onsen-css-components.css"/>
 
     <script src="node_modules/onsenui/js/onsenui.js"></script>
+    <script src="node_modules/jquery/dist/jquery.js"></script>
 
     <link rel="apple-touch-startup-image" href="https://previews.123rf.com/images/photobizz/photobizz1211/photobizz121100024/16428232-Forrest-in-autumn-and-sunlight-Stock-Photo.jpg">
 
@@ -30,61 +31,57 @@
     <link rel="apple-touch-startup-image" href="iphone-startup.png">
     <link rel="apple-touch-startup-image" href="ipad-landscape-startup.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)" />
     <link rel="apple-touch-startup-image" href="ipad-portrait-startup.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)" />
-    </script>
-    <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-       @media (display-mode: fullscreen) {
-       }
-      #map {
-        height: 100%;
-        width:100%
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
+  </script>
+<style>
+/* Always set the map height explicitly to define the size of the div
+ * element that contains the map. */
+ @media (display-mode: fullscreen) {
+ }
+#map {
+  height: 100%;
+  width:100%
+}
+/* Optional: Makes the sample page fill the window. */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
 
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-       @media (display-mode: fullscreen) {
-       }
-      #map {
-        height: 100%;
-        width:100%
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-      #title {
-         padding: 5px;
-         border: none;
-         border-bottom: 1px solid lightgray;
-         width: 95%;
-         font-size: 1.5em;
-
-       }
-
-
-       #description {
-         padding-left: 10px;
-         padding-right: 10px;
-         border: none;
-         width:95%;
-         font-family: sans-serif;
-         font-size: 1.3em;
-         height:auto;
-         overflow: scroll;
-
-      }
-    </style>
-  </head>
-  <body>
+/* Always set the map height explicitly to define the size of the div
+ * element that contains the map. */
+ @media (display-mode: fullscreen) {
+ }
+#map {
+  height: 100%;
+  width:100%
+}
+/* Optional: Makes the sample page fill the window. */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+#title {
+   padding: 5px;
+   border: none;
+   border-bottom: 1px solid lightgray;
+   width: 90%;
+   font-size: 1.5em;
+ }
+ #description {
+   padding-left: 10px;
+   padding-right: 10px;
+   border: none;
+   width:90%;
+   font-family: sans-serif;
+   font-size: 1.3em;
+   height:auto;
+   overflow: scroll;
+  }
+</style>
+</head>
+<body>
 
 <ons-navigator id="myNavigator" page="map-page"></ons-navigator>
 <ons-template id="form-page">
@@ -92,18 +89,13 @@
   <ons-back-button type="button" id="cancelButton">Back</ons-back-button>
   </ons-toolbar>
 <div style="text-align: center; margin-top: 30px;">
-    <!--<p>
-      <ons-input id="title" modifier="underbar" placeholder="Title" float></ons-input>
-    </p>-->
-
       <div id="form"style="text-align: center; margin-top: 30px;">
       <input id="title"placeholder="Title"></input>
       <br>
       <textarea id="description" rows="5" cols="80" placeholder="Event description"></textarea>
   </div>
-      <!--<ons-input id="description" modifier="underbar" type="Text" placeholder="Description" float></ons-input>-->
-
   </div>
+
   <ons-list>
     <ons-list-item tappable>
       <label class="left">
@@ -115,7 +107,7 @@
     </ons-list-item>
     <ons-list-item tappable>
       <label class="left">
-        <ons-input type="checkbox" input-id="snacks"></ons-input>
+        <ons-input type="checkbox" input-id="snack" ></ons-input>
       </label>
       <label for="check-2" class="center">
         Snack
@@ -136,23 +128,29 @@
 </ons-template>
     <script>
 
-
     document.addEventListener('deviceready', function() {
         StatusBar.overlaysWebView(false);
         StatusBar.backgroundColorByName('green');
     }, false);
 
-
-// -GET MY POSITION FuNCTION
 var x = document.getElementById("map");
 var formInfo = {}
 
+// -GET MY POSITION FuNCTION
 function getLocation() {
   var title = document.getElementById('title').value;
   var description = document.getElementById('description').value;
-  var coffee = document.getElementById('coffee').value;
-  var snacks = document.getElementById('snacks').value;
-  formInfo = {"title":title, "description":description, "coffee":coffee, "snacks":snacks}
+  if ($('#coffee').prop('checked') == true) {
+    var coffee = "Yes!";
+  }else{
+    var coffee = "No";
+  }
+  if ($('#snack').prop('checked') == true) {
+    var snack = "Yes!";
+  }else{
+    var snack = "No";
+  }
+  formInfo = {"title":title, "description":description, "coffee":coffee, "snack":snack}
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition);
     } else {
@@ -168,7 +166,6 @@ function getLocation() {
           position: {lat: position.coords.latitude, lng: position.coords.longitude},
           title:"Event"
           });
-//controlUI.addEventListener('click', function() {
        map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude} );
 
        markerEventPosition.addListener('click', function(){
@@ -180,7 +177,7 @@ function getLocation() {
            '<div id="bodyContent">'+
            '<p>'+ formInfo["description"] +
            '<p> Coffee: '+ formInfo["coffee"] +''+
-           '<p> Snacks: '+ formInfo["snacks"] +''+
+           '<p> Snack: '+ formInfo["snack"] +''+
            '</div>'+
            '</div>';
 
@@ -189,134 +186,25 @@ function getLocation() {
              });
              infowindow.open(map, markerEventPosition);
          });
-     //  });
-
     }
-
+      // Google Map
       var map;
-
-      // Move to Oscar button
-      function CenterControlOscar(controlDiv, map) {
-
-          // Set CSS for the control border.
-          var controlUI = document.createElement('div');
-          controlUI.style.backgroundColor = '#fff';
-          controlUI.style.border = '2px solid #fff';
-          controlUI.style.borderRadius = '3px';
-          controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
-          controlUI.style.cursor = 'pointer';
-          controlUI.style.marginBottom = '22px';
-          controlUI.style.textAlign = 'center';
-          controlUI.title = 'Click to go to Oscars place';
-          controlDiv.appendChild(controlUI);
-
-          // Set CSS for the control interior.
-          var controlText = document.createElement('div');
-          controlText.style.color = 'rgb(25,25,25)';
-          controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
-          controlText.style.fontSize = '16px';
-          controlText.style.lineHeight = '38px';
-          controlText.style.paddingLeft = '5px';
-          controlText.style.paddingRight = '5px';
-          controlText.innerHTML = 'Oscar';
-          controlUI.appendChild(controlText);
-
-          // Setup the click event listeners: simply set the map to Chicago.
-          controlUI.addEventListener('click', function() {
-                                     map.setCenter({lat: 59.6, lng: 18.6} );
-                                     });
-        markerMyPositionO = new google.maps.Marker({
-          map: map,
-          draggable: false,
-          animation: google.maps.Animation.DROP,
-          position: {lat: 59.6, lng: 18.6},
-          title:"Oscars' Place!"
-          });
-          markerMyPositionO.addListener('click', function(){
-            var contentString = '<div id="content">'+
-              '<div id="siteNotice">'+
-              '</div>'+
-              '<h1 id="firstHeading" class="firstHeading">Oscars place</h1>'+
-              '<div id="bodyContent">'+
-              '<p><b>Oscar</b> is a cool guy, living in the forest.  ' +
-              '</div>'+
-              '<toggle >Click me</toggle>'+
-              '</div>';
-
-              var infowindow = new google.maps.InfoWindow({
-                content: contentString
-                });
-                infowindow.open(map, markerMyPositionO);
-            });
-      }
-
-
 
       // Constructor
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 59.349806, lng: 18.070665},
+          center: {lat: 59.347106, lng: 18.071965},
           zoom: 17,
           mapTypeId: 'hybrid',
-          //disableDefaultUI: true,
           tilt:45,
-
           zoomControl: false,
           mapTypeControl: false,
           scaleControl: false,
           streetViewControl: false,
           rotateControl: false,
-
           fullscreenControl: false
         });
-
-
-
-        var centerControlDivOscar = document.createElement('div');
-        var centerControlOscar = new CenterControlOscar(centerControlDivOscar, map);
-        centerControlDivOscar.index = 1;
-        map.controls[google.maps.ControlPosition.TOP_RIGHT].push(centerControlDivOscar);
-
-
-        marker = new google.maps.Marker({
-          map: map,
-          draggable: true,
-          animation: google.maps.Animation.DROP,
-          position: {lat: 59.349806, lng: 18.070665},
-          draggable:true,
-          title:"Drag me!"
-        });
-
-        markerSolid = new google.maps.Marker({
-          map: map,
-          draggable: true,
-          animation: google.maps.Animation.DROP,
-          position: {lat: 59.349160, lng: 18.070890},
-          draggable:false,
-          title:"Leave me alone!"
-        });
-
-        marker.addListener('click', toggleBounce);
-        markerSolid.addListener('click', toggleBounce2);
       }
-
-      function toggleBounce() {
-        if (marker.getAnimation() !== null) {
-          marker.setAnimation(null);
-
-        } else {
-          marker.setAnimation(google.maps.Animation.BOUNCE);
-        }
-      }
-      function toggleBounce2() {
-        if (markerSolid.getAnimation() !== null) {
-          markerSolid.setAnimation(null);
-
-        } else {
-          markerSolid.setAnimation(google.maps.Animation.BOUNCE);
-        }
-      }
-
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYWmQkeSCXE_Po-9UELcOHc0MHSd8kPuI&callback=initMap"
     async defer></script>
