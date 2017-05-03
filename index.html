@@ -50,10 +50,77 @@
   </head>
   <body>
 
+<ons-navigator id="myNavigator" page="map-page.html"></ons-navigator>
+
+<ons-template id="form-page">
+<div style="text-align: center; margin-top: 30px;">
+    <p>
+      <ons-input id="username" modifier="underbar" placeholder="Title" float></ons-input>
+    </p>
+    <p>
+      <ons-input id="password" modifier="underbar" type="Text" placeholder="Description" float></ons-input>
+    </p>
+  
+  </div>
+
+  <ons-list>
+    <ons-list-item tappable>
+      <label class="left">
+        <ons-input type="checkbox" input-id="check-1"></ons-input>
+      </label>
+      <label for="check-1" class="center">
+        Coffee
+      </label>
+    </ons-list-item>
+    <ons-list-item tappable>
+      <label class="left">
+        <ons-input type="checkbox" input-id="check-2"></ons-input>
+      </label>
+      <label for="check-2" class="center">
+        Snack
+      </label>
+    </ons-list-item>
+  </ons-list>
+
+
     <ons-button type="button" id="getMyLocation" onclick="getLocation()">Show my position!</ons-button>
-    <div id="map"></div>
+    </ons-template>
+
+
+<ons-template id="map-page.html">
+    <div id="map">
+      </div>
+
+<ons-fab ripple style="position: absolute;bottom: 30px;right: 30px;" id="createEventButton">
+  <ons-icon
+    icon="md-plus">
+  </ons-icon>
+</ons-fab>
+    
+</ons-template>
+
 
     <script>
+
+createEvent = function() {
+ page.querySelector('#createEventButton').onclick = function(event) {
+      document.querySelector('#myNavigator').pushPage('form-page.html', {data: {title: 'Page 2'}});
+    };
+};
+document.addEventListener('init', function(event) {
+  var page = event.target;
+
+  if (page.id === 'map-page.html') {
+    page.querySelector('#createEventButton').onclick = function() {
+      document.querySelector('#myNavigator').pushPage('form-page.html', {data: {title: 'Page 2'}});
+    };
+  } else if (page.id === 'form-page.html') {
+    page.querySelector('ons-toolbar .center').innerHTML = page.data.title;
+  }
+});
+
+
+
     document.addEventListener('deviceready', function() {
         StatusBar.overlaysWebView(false);
         StatusBar.backgroundColorByName('green');
