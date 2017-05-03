@@ -46,27 +46,68 @@
         margin: 0;
         padding: 0;
       }
+
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+       @media (display-mode: fullscreen) {
+       }
+      #map {
+        height: 100%;
+        width:100%
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #title {
+         padding: 5px;
+         border: none;
+         border-bottom: 1px solid lightgray;
+         width: 95%;
+         font-size: 1.5em;
+
+       }
+
+
+       #description {
+         padding-left: 10px;
+         padding-right: 10px;
+         border: none;
+         width:95%;
+         font-family: sans-serif;
+         font-size: 1.3em;
+         height:auto;
+         overflow: scroll;
+
+      }
     </style>
   </head>
   <body>
 
-<ons-navigator id="myNavigator" page="map-page.html"></ons-navigator>
-
+<ons-navigator id="myNavigator" page="map-page"></ons-navigator>
 <ons-template id="form-page">
+  <ons-toolbar>
+  <ons-back-button type="button" id="cancelButton">Back</ons-back-button>
+  </ons-toolbar>
 <div style="text-align: center; margin-top: 30px;">
-    <p>
-      <ons-input id="username" modifier="underbar" placeholder="Title" float></ons-input>
-    </p>
-    <p>
-      <ons-input id="password" modifier="underbar" type="Text" placeholder="Description" float></ons-input>
-    </p>
-  
-  </div>
+    <!--<p>
+      <ons-input id="title" modifier="underbar" placeholder="Title" float></ons-input>
+    </p>-->
 
+      <div id="form"style="text-align: center; margin-top: 30px;">
+      <input id="title"placeholder="Title"></input>
+      <br>
+      <textarea id="description" rows="5" cols="80" placeholder="Event description"></textarea>
+  </div>
+      <!--<ons-input id="description" modifier="underbar" type="Text" placeholder="Description" float></ons-input>-->
+
+  </div>
   <ons-list>
     <ons-list-item tappable>
       <label class="left">
-        <ons-input type="checkbox" input-id="check-1"></ons-input>
+        <ons-input type="checkbox" input-id="coffee"></ons-input>
       </label>
       <label for="check-1" class="center">
         Coffee
@@ -74,51 +115,26 @@
     </ons-list-item>
     <ons-list-item tappable>
       <label class="left">
-        <ons-input type="checkbox" input-id="check-2"></ons-input>
+        <ons-input type="checkbox" input-id="snacks"></ons-input>
       </label>
       <label for="check-2" class="center">
         Snack
       </label>
     </ons-list-item>
+    <ons-back-button style="padding-left:35%;" modifier="large" type="button" id="getMyLocation" onclick="getLocation()">Create Event</ons-back-button>
   </ons-list>
-
-
-    <ons-button type="button" id="getMyLocation" onclick="getLocation()">Show my position!</ons-button>
     </ons-template>
 
-
-<ons-template id="map-page.html">
+<ons-template id="map-page">
     <div id="map">
       </div>
-
-<ons-fab ripple style="position: absolute;bottom: 30px;right: 30px;" id="createEventButton">
+<ons-fab ripple style="position: absolute;bottom: 30px;right: 30px;" id="createEventButton" onclick="document.querySelector('#myNavigator').pushPage('form-page', {});">
   <ons-icon
     icon="md-plus">
   </ons-icon>
 </ons-fab>
-    
 </ons-template>
-
-
     <script>
-
-createEvent = function() {
- page.querySelector('#createEventButton').onclick = function(event) {
-      document.querySelector('#myNavigator').pushPage('form-page.html', {data: {title: 'Page 2'}});
-    };
-};
-document.addEventListener('init', function(event) {
-  var page = event.target;
-
-  if (page.id === 'map-page.html') {
-    page.querySelector('#createEventButton').onclick = function() {
-      document.querySelector('#myNavigator').pushPage('form-page.html', {data: {title: 'Page 2'}});
-    };
-  } else if (page.id === 'form-page.html') {
-    page.querySelector('ons-toolbar .center').innerHTML = page.data.title;
-  }
-});
-
 
 
     document.addEventListener('deviceready', function() {
@@ -129,8 +145,14 @@ document.addEventListener('init', function(event) {
 
 // -GET MY POSITION FuNCTION
 var x = document.getElementById("map");
+var formInfo = {}
 
 function getLocation() {
+  var title = document.getElementById('title').value;
+  var description = document.getElementById('description').value;
+  var coffee = document.getElementById('coffee').value;
+  var snacks = document.getElementById('snacks').value;
+  formInfo = {"title":title, "description":description, "coffee":coffee, "snacks":snacks}
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition);
     } else {
@@ -139,18 +161,34 @@ function getLocation() {
 }
 
     function showPosition(position) {
-        console.log(position.coords.latitude);
-        console.log(position.coords.longitude);
-        markerMyPositionF = new google.maps.Marker({
-
+        markerEventPosition = new google.maps.Marker({
           map: map,
           draggable: false,
           animation: google.maps.Animation.DROP,
           position: {lat: position.coords.latitude, lng: position.coords.longitude},
-          title:"'Your position!"
+          title:"Event"
           });
 //controlUI.addEventListener('click', function() {
        map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude} );
+
+       markerEventPosition.addListener('click', function(){
+         console.log(formInfo);
+         var contentString = '<div id="content">'+
+           '<div id="siteNotice">'+
+           '</div>'+
+           '<h1 id="firstHeading" class="firstHeading">'+ formInfo["title"] +'</h1>'+
+           '<div id="bodyContent">'+
+           '<p>'+ formInfo["description"] +
+           '<p> Coffee: '+ formInfo["coffee"] +''+
+           '<p> Snacks: '+ formInfo["snacks"] +''+
+           '</div>'+
+           '</div>';
+
+           var infowindow = new google.maps.InfoWindow({
+             content: contentString
+             });
+             infowindow.open(map, markerEventPosition);
+         });
      //  });
 
     }
@@ -229,7 +267,7 @@ function getLocation() {
           streetViewControl: false,
           rotateControl: false,
 
-          fullscreenControl: true
+          fullscreenControl: false
         });
 
 
