@@ -9,7 +9,7 @@
 
     <link rel="apple-touch-startup-image" href="https://previews.123rf.com/images/photobizz/photobizz1211/photobizz121100024/16428232-Forrest-in-autumn-and-sunlight-Stock-Photo.jpg">
 
-    <title>Simple Map</title>
+    <title>StandsOnCampus</title>
 
     <!-- set the viewport-->
     <meta name="viewport" content = "width = device-width, initial-scale = 1.0, minimum-scale = 1, maximum-scale = 1, user-scalable = no" />
@@ -86,7 +86,7 @@ html, body {
 </head>
 <body>
 
-<ons-navigator id="myNavigator" page="map-page"></ons-navigator>
+<ons-navigator  id="myNavigator" page="map-page"></ons-navigator>
 <ons-template id="form-page">
   <ons-toolbar>
   <ons-back-button type="button" id="cancelButton">
@@ -117,7 +117,7 @@ html, body {
         Snack
       </label>
     </ons-list-item>
-    <ons-back-button style="padding-left:35%;" modifier="large" type="button" id="getMyLocation" onclick="getLocation()">Create Event</ons-back-button>
+    <ons-button  modifier="large" type="button" onclick="getLocation()">Create Event</ons-button>
   </ons-list>
     </ons-template>
 
@@ -142,6 +142,12 @@ var formInfo = {}
 
 // -GET MY POSITION FuNCTION
 function getLocation() {
+  myNavigator.popPage()
+
+  // .then(function() {
+  //   ons.notification.alert('New page is popped.');
+  // })
+  //myNavigator.popPage('map-page');
   var title = document.getElementById('title').value;
   var description = document.getElementById('description').value;
   if ($('#coffee').prop('checked') == true) {
