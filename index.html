@@ -26,7 +26,7 @@
     <link rel="apple-touch-icon" sizes="76x76" href="touch-icon-ipad.png">
     <link rel="apple-touch-icon" sizes="120x120" href="touch-icon-iphone-retina.png">
     <link rel="apple-touch-icon" sizes="152x152" href="touch-icon-ipad-retina.png">'
-      
+
 
     <!-- Startup image code-->
     <link rel="apple-touch-startup-image" href="iphone-startup.png">
@@ -107,7 +107,7 @@ html, body {
         <ons-input type="checkbox" input-id="coffee"></ons-input>
       </label>
       <label for="check-1" class="center">
-        Coffee    
+        Coffee
       </label>
     </ons-list-item>
     <ons-list-item tappable>
@@ -145,20 +145,18 @@ var formInfo = {}
 function getLocation() {
     //go back to map page
   myNavigator.popPage();
-   
   var title = document.getElementById('title').value;
   var description = document.getElementById('description').value;
   if ($('#coffee').prop('checked') == true) {
-    var coffee = "We have coffee ";
-      console.log(coffee);
+    var coffee = "<h4><ons-icon icon='coffee'></ons-icon> Coffee</h4>";
   }else{
     var coffee = "";
-  }
+  };
   if ($('#snack').prop('checked') == true) {
-    var snack = "Yes!";
+    var snack = "<h4><ons-icon icon='ion-android-checkbox'></ons-icon> Snack</h4>";
   }else{
-    var snack = "No";
-  }
+    var snack = "";
+  };
   formInfo = {"title":title, "description":description, "coffee":coffee, "snack":snack}
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(createEventMarker);
@@ -166,7 +164,6 @@ function getLocation() {
         x.innerHTML = "Geolocation is not supported by this browser.";
     }
 }
-
     function createEventMarker(position) {
         markerEventPosition = new google.maps.Marker({
           map: map,
@@ -176,36 +173,21 @@ function getLocation() {
           title:"Event"
           });
        map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude} );
-
        markerEventPosition.addListener('click', function(){
-        
-         if (formInfo["coffee"] == "yes") {
-             var coffee = "'<h4>' + '<ons-icon icon='coffee'></ons-icon> + ' Coffee'+</h4>'";
-         }else{
-             var coffee = "";
-         }
-         if (formInfo["snack"] = "yes") {
-             var snack = "'<h4>' + '<ons-icon icon='ion-android-checkbox'></ons-icon> + ' Snack'+</h4>'";
-         }else{
-             var snack = "";
-         }
-             
          var contentString =
            '<h3 >'+ formInfo["title"] +'</h3>'+
            '<p>'+ formInfo["description"] + '</p>' +
-           coffee + '<br>' +
-           snack +
+           formInfo['coffee'] +
+           formInfo['snack'] +
            '</div>';
-
            var infowindow = new google.maps.InfoWindow({
              content: contentString
              });
              infowindow.open(map, markerEventPosition);
          });
-    }
+       }
       // Google Map
       var map;
-
       // Constructor
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
