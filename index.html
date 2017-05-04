@@ -80,6 +80,13 @@ html, body {
    height:auto;
    overflow: scroll;
   }
+  #password {
+    padding: 5px;
+    border: none;
+    border-bottom: 1px solid lightgray;
+    width: 95%;
+    font-size: 1.5em;
+   }
   p{
     font-size:1.2em;
   }
@@ -97,7 +104,11 @@ html, body {
       <div id="form"style="text-align: center; margin-top: 30px;">
       <input id="title" placeholder="Title"></input>
       <br>
+      <input id="password" placeholder="Password for editing"></input>
+      <br>
       <textarea id="description" rows="5" cols="80" placeholder="Event description"></textarea>
+
+
   </div>
   </div>
 
@@ -151,6 +162,7 @@ function getLocation() {
     //go back to map page
   myNavigator.popPage();
   var title = document.getElementById('title').value;
+  var password = document.getElementById('password').value;
   var description = document.getElementById('description').value;
   if ($('#coffee').prop('checked') == true) {
     var coffee = "<h4><ons-icon icon='coffee'></ons-icon> Coffee</h4>";
@@ -162,7 +174,7 @@ function getLocation() {
   }else{
     var snack = "";
   };
-  formInfo = {"title":title, "description":description, "coffee":coffee, "snack":snack}
+  formInfo = {"title":title, "password":password, "description":description, "coffee":coffee, "snack":snack}
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(createEventMarker);
     } else {
@@ -184,6 +196,7 @@ function createEventMarker(position) {
      '<p>'+ formInfo["description"] + '</p>' +
      formInfo['coffee'] +
      formInfo['snack'] +
+     '<ons-button onclick="login(formInfo)">Edit</ons-button>' +
      '</div>';
      var infowindow = new google.maps.InfoWindow({
        content: contentString
@@ -191,6 +204,16 @@ function createEventMarker(position) {
        infowindow.open(map, markerEventPosition);
      });
    }
+function login(fi) {
+  var person = prompt("Password",);
+  if (person == fi['password']) {
+    
+    myNavigator.pushPage('form-page');
+  }
+  else {
+    alert("error");
+}
+}
       // Google Map
       var map;
       // Constructor
