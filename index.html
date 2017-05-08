@@ -103,6 +103,23 @@ p{
 
 <ons-navigator  id="myNavigator" page="map-page"></ons-navigator>
 
+<ons-template id="map-page">
+  <ons-page material>
+    <ons-toolbar>
+      <div class="left"><ons-toolbar-button onclick="login()">Login</ons-toolbar-button></div>
+      <div class="center">Stands On Campus</div>
+      <div class="right"><ons-toolbar-button onclick="myNavigator.pushPage('about-page');">About</ons-toolbar-button></div>
+    </ons-toolbar>
+    <div id="map">
+    </div>
+    <ons-fab ripple style="position: absolute;bottom: 60px;right: 40px;" id="createEventButton" onclick="myNavigator.pushPage('form-page');">
+      <ons-icon
+      icon="md-plus">
+    </ons-icon>
+  </ons-fab>
+</ons-page>
+</ons-template>
+
 <ons-template id="form-page">
   <ons-page material>
     <ons-toolbar material>
@@ -141,22 +158,6 @@ p{
     </ons-page>
   </ons-template>
 
-  <ons-template id="map-page">
-    <ons-page material>
-      <ons-toolbar>
-        <div class="center">Stands On Campus</div>
-        <div class="right"><ons-toolbar-button onclick="myNavigator.pushPage('about-page');">About</ons-toolbar-button></div>
-      </ons-toolbar>
-      <div id="map">
-      </div>
-      <ons-fab ripple style="position: absolute;bottom: 60px;right: 40px;" id="createEventButton" onclick="myNavigator.pushPage('form-page');">
-        <ons-icon
-        icon="md-plus">
-      </ons-icon>
-    </ons-fab>
-  </ons-page>
-</ons-template>
-
 <ons-template id="about-page">
   <ons-page material>
     <ons-toolbar material>
@@ -165,6 +166,16 @@ p{
     </ons-toolbar>
     <p style="padding-left:15px;padding-right:15px;">Here you can find stands on campus where you can talk to people from companies and organisation. <br><br>There may be coffee, snacks or job opportunities available! </p>
     <p style="padding-left:15px;padding-right:15px;">If you want to put up a stand, go to the map view and press the 'add button' in the down right corner.  </p>
+  </ons-page>
+</ons-template>
+
+<ons-template id="login-page">
+  <ons-page>
+    <ons-toolbar>
+      <ons-back-button class="left"></ons-back-button>
+      <div class="center"> User </div>
+    </ons-toolbar>
+    hej
   </ons-page>
 </ons-template>
 
@@ -253,7 +264,7 @@ function getLocation() {
       '<p style="overflow:scroll;">'+ formInfo["description"] + '</p>' +
       formInfo['coffee'] +
       formInfo['snack'] +
-      '<ons-button onclick="login(formInfo)">Edit</ons-button>' +
+      '<ons-button onclick="checkPassword(formInfo)">Edit</ons-button>' +
       '</div>';
       var infowindow = new google.maps.InfoWindow({
         content: contentString
@@ -263,7 +274,7 @@ function getLocation() {
   }
 
   // PASSWORD CHECK FOR EDITING EVENT
-  function login(fi) {
+  function checkPassword(fi) {
 
     var person = prompt("Password",);
     if (person == fi['password']) {
@@ -311,6 +322,50 @@ function getLocation() {
   };
   firebase.initializeApp(config);
 
+
+  login = function() {
+  myNavigator.pushPage('login-page');
+
+  var provider = new firebase.auth.GoogleAuthProvider();
+
+  firebase.auth().signInWithRedirect(provider).then(function(result) {
+    // This gives you a Google Access Token. You can use it to access the Google API.
+    var token = result.credential.accessToken;
+    // The signed-in user info.
+    var user = result.user;
+    console.log('OK?')
+    // ...
+  }).catch(function(error) {
+    // Handle Errors here.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // The email of the user's account used.
+    var email = error.email;
+    // The firebase.auth.AuthCredential type that was used.
+    var credential = error.credential;
+    // ...
+    console.log('error')
+  });
+  
+  firebase.auth().getRedirectResult().then(function(result) {
+    if (result.credential) {
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      var token = result.credential.accessToken;
+      // ...
+    }
+    // The signed-in user info.
+    var user = result.user;
+  }).catch(function(error) {
+    // Handle Errors here.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // The email of the user's account used.
+    var email = error.email;
+    // The firebase.auth.AuthCredential type that was used.
+    var credential = error.credential;
+  // ...
+  });
+  }
   //Try to initialize Firebase
   //var quizRef = firebase.database().ref().child("users/" + Quiz.getUid());
   saveEvents = function() {
