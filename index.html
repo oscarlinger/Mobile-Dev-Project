@@ -106,13 +106,13 @@ p{
 <ons-template id="map-page">
   <ons-page material>
     <ons-toolbar>
-      <div class="left"><ons-toolbar-button onclick="login()">Login</ons-toolbar-button></div>
+      <!--<div class="left"><ons-toolbar-button onclick="login()">Login</ons-toolbar-button></div>-->
       <div class="center">Stands On Campus</div>
       <div class="right"><ons-toolbar-button onclick="myNavigator.pushPage('about-page');">About</ons-toolbar-button></div>
     </ons-toolbar>
     <div id="map">
     </div>
-    <ons-fab ripple style="position: absolute;bottom: 60px;right: 40px;" id="createEventButton" onclick="myNavigator.pushPage('form-page');">
+    <ons-fab ripple style="position: absolute;bottom: 60px;right: 40px;" id="createEventButton" onclick="newForm()">
       <ons-icon
       icon="md-plus">
     </ons-icon>
@@ -153,7 +153,7 @@ p{
           </label>
         </ons-list-item>
         <ons-button  modifier="large" type="button" onclick="getLocation()">Create Event</ons-button>
-        <ons-button id="deleteButton" modifier="large" type="button" onclick="clearMarkers()" modifier="large" disabled="true">Delete Event</ons-button>
+        <ons-button id="deleteButton" modifier="large" type="button" onclick="deleteMarker(id)" modifier="large" disabled="true">Delete Event</ons-button>
       </ons-list>
     </ons-page>
   </ons-template>
@@ -175,7 +175,7 @@ p{
       <ons-back-button class="left"></ons-back-button>
       <div class="center"> User </div>
     </ons-toolbar>
-    hej
+    Example text
   </ons-page>
 </ons-template>
 
@@ -184,47 +184,62 @@ p{
 var map;
 var x = document.getElementById("map");
 var formInfo = {}
-markers = new Array();
+
+var markers = [];
+var uniqueId = 1;
+
+function removeMarker(markerId) {
+    if(markers[markerId]){
+        markers[markerId].setMap(null);
+        delete markers[markerId];
+    }
+}
+
 addMarker = function(marker) {
   this.markers[this.markers.length] = marker;
 };
-getMarkers = function() {
-  return this.markers
-};
-clearMarkers = function() {
-  for(var i=0; i<this.markers.length; i++){
-    this.markers[i].setMap(null);
-  }
-  this.markers = new Array();
 
-  myNavigator.querySelector('#deleteButton').disabled = true;
-  myNavigator.popPage();
-};
+function deleteMarker(id) {
+  //Find and remove the marker from the Array
+  for (var i = 0; i < markers.length; i++) {
+      if (markers[i].id == id) {
+          //Remove the marker from Map
+          markers[i].setMap(null);
+          //Remove the marker from array.
+          markers.splice(i, 1);
+          return;
+      }
+    }
+  }
 
 document.addEventListener('deviceready', function() {
   StatusBar.overlaysWebView(false);
   StatusBar.backgroundColorByName('green');
 }, false);
 
+function newForm(){
+  myNavigator.pushPage('form-page');
+  //$('#deleteButton').disabled = false;
+}
+
 // -GET MY POSITION FuNCTION
 function getLocation() {
   if (document.getElementById('title').value == "") {
     document.getElementById("title").placeholder = "Title is required*";
     //HOW TO CHANGE placeholder COLOR TO RED???
-    //document.getElementById("title").style.color = "green";
-    return; }
+      return; }
     //go back to map page
-    myNavigator.popPage();
+  myNavigator.popPage();
     var title = document.getElementById('title').value;
     var password = document.getElementById('password').value;
     var description = document.getElementById('description').value;
     if ($('#coffee').prop('checked') == true) {
-      var coffee = "<h4><ons-icon icon='coffee'></ons-icon> Coffee</h4>";
+      var coffee = '<h4 style="text-align:center;"><ons-icon icon="coffee"></ons-icon> Coffee</h4>';
     }else{
       var coffee = "";
     };
     if ($('#snack').prop('checked') == true) {
-      var snack = "<h4><ons-icon icon='ion-android-checkbox'></ons-icon> Snack</h4>";
+      var snack = '<h4 style="text-align:center;"><ons-icon icon="ion-android-checkbox"></ons-icon> Snack</h4>';
     }else{
       var snack = "";
     };
@@ -235,10 +250,11 @@ function getLocation() {
       x.innerHTML = "Geolocation is not supported by this browser.";
     }
   }
+
   // CREATE MARKER FOR EVENT
   function createEventMarker(position) {
     // http://www.lass.it/Web/viewer.aspx?id=4
-    markerEventPosition = new google.maps.Marker({
+    marker = new google.maps.Marker({
       map: map,
       draggable: true,
       animation: google.maps.Animation.DROP,
@@ -246,39 +262,42 @@ function getLocation() {
       position: {lat: position.coords.latitude, lng: position.coords.longitude},
       title:"Event"
     });
-
-    addMarker(markerEventPosition);
+    // set unique ID
+    marker.id = uniqueId;
+            uniqueId++;
+      console.log(marker.id);
+    //add marker to markers
 
     // Change the marker icon depending on the availability of coffee or snacks
     if (formInfo['coffee'] != '') {
-      markerEventPosition.setIcon('http://maps.google.com/mapfiles/kml/shapes/coffee.png');
+      marker.setIcon('http://maps.google.com/mapfiles/kml/shapes/coffee.png');
     };
     if (formInfo['snack'] != '' && formInfo['coffee'] == '') {
-      markerEventPosition.setIcon('http://maps.google.com/mapfiles/ms/micons/snack_bar.png');
+      marker.setIcon('http://maps.google.com/mapfiles/ms/micons/snack_bar.png');
     };
     // Create an infowindow for the marker with information from the form-page
     map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude} );
-    markerEventPosition.addListener('click', function(){
+    marker.addListener('click', function(){
       var contentString =
-      '<h3 >'+ formInfo["title"] +'</h3>'+
-      '<p style="overflow:scroll;">'+ formInfo["description"] + '</p>' +
+      '<h1 style="text-align:center;">'+ formInfo["title"] +'</h1>'+
+      '<p style="overflow:scroll;text-align:center;">'+ formInfo["description"] + '</p>' +
       formInfo['coffee'] +
       formInfo['snack'] +
-      '<ons-button onclick="checkPassword(formInfo)">Edit</ons-button>' +
+      '<ons-button modifier="large" onclick="checkPassword(formInfo, ' + marker.id + ')">Edit</ons-button>' +
       '</div>';
       var infowindow = new google.maps.InfoWindow({
         content: contentString
       });
-      infowindow.open(map, markerEventPosition);
+      infowindow.open(map, marker);
     });
+    markers.push(marker);
   }
 
   // PASSWORD CHECK FOR EDITING EVENT
-  function checkPassword(fi) {
-
+  function checkPassword(fi, id) {
     var person = prompt("Password",);
     if (person == fi['password']) {
-      fillForm()
+      fillForm(fi, id)
     }
     else {
       alert("You need the correct password to edit");
@@ -286,12 +305,20 @@ function getLocation() {
   }
 
   // FILL EDIT-FORM WITH EVENT INFO
-  function fillForm(){
-    myNavigator.pushPage('form-page', {data: {title:'formInfo["title"]', password: 'formInfo["password"]', description: 'formInfo["description"]'}});
+  function fillForm(fi, id){
+    myNavigator.pushPage('form-page');
     document.addEventListener('init', function(event) {
       var page = event.target;
+      page.querySelector('#title').value = formInfo["title"];
+      page.querySelector('#password').value = formInfo["password"];
+      page.querySelector('#description').value = formInfo["description"];
+      if (formInfo["coffee"] != "") {
+        page.querySelector('#coffee').checked = true;
+      }
+      if (formInfo["snack"] != "") {
+        page.querySelector('#snack').checked = true;
+      }
       page.querySelector('#deleteButton').disabled = false;
-      //page.querySelector('#textarea').innerHTML = page.data.title;
     });
   }
 
@@ -311,83 +338,83 @@ function getLocation() {
     });
   }
 
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyDF_t6AHulQgB54JCXXAlCMDV8-HNnnRq4",
-    authDomain: "standsoncampus.firebaseapp.com",
-    databaseURL: "https://standsoncampus.firebaseio.com",
-    projectId: "standsoncampus",
-    storageBucket: "standsoncampus.appspot.com",
-    messagingSenderId: "77528318626"
-  };
-  firebase.initializeApp(config);
-
-
-  login = function() {
-  myNavigator.pushPage('login-page');
-
-  var provider = new firebase.auth.GoogleAuthProvider();
-
-  firebase.auth().signInWithRedirect(provider).then(function(result) {
-    // This gives you a Google Access Token. You can use it to access the Google API.
-    var token = result.credential.accessToken;
-    // The signed-in user info.
-    var user = result.user;
-    console.log('OK?')
-    // ...
-  }).catch(function(error) {
-    // Handle Errors here.
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    // The email of the user's account used.
-    var email = error.email;
-    // The firebase.auth.AuthCredential type that was used.
-    var credential = error.credential;
-    // ...
-    console.log('error')
-  });
-  
-  firebase.auth().getRedirectResult().then(function(result) {
-    if (result.credential) {
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      var token = result.credential.accessToken;
-      // ...
-    }
-    // The signed-in user info.
-    var user = result.user;
-  }).catch(function(error) {
-    // Handle Errors here.
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    // The email of the user's account used.
-    var email = error.email;
-    // The firebase.auth.AuthCredential type that was used.
-    var credential = error.credential;
-  // ...
-  });
-  }
-  //Try to initialize Firebase
-  //var quizRef = firebase.database().ref().child("users/" + Quiz.getUid());
-  saveEvents = function() {
-    var uid = Quiz.getUid();
-    var username = Quiz.getUsername();
-    var events = Quiz.getListEvents();
-
-    var userRef = $firebaseArray(firebase.database().ref().child('users/' + uid));
-    userRef.$add({
-      author: username,
-      uid: uid,
-      events: events
-    })
-
-    var quizRef = $firebaseArray(firebase.database().ref().child('quiz/'));
-    quizRef.$add({
-      author: username,
-      uid: uid,
-      events: events
-    })
-  }
-
+  //
+  // // Initialize Firebase
+  // var config = {
+  //   apiKey: "AIzaSyDF_t6AHulQgB54JCXXAlCMDV8-HNnnRq4",
+  //   authDomain: "standsoncampus.firebaseapp.com",
+  //   databaseURL: "https://standsoncampus.firebaseio.com",
+  //   projectId: "standsoncampus",
+  //   storageBucket: "standsoncampus.appspot.com",
+  //   messagingSenderId: "77528318626"
+  // };
+  // firebase.initializeApp(config);
+  //
+  //
+  // login = function() {
+  // myNavigator.pushPage('login-page');
+  //
+  // var provider = new firebase.auth.GoogleAuthProvider();
+  //
+  // firebase.auth().signInWithRedirect(provider).then(function(result) {
+  //   // This gives you a Google Access Token. You can use it to access the Google API.
+  //   var token = result.credential.accessToken;
+  //   // The signed-in user info.
+  //   var user = result.user;
+  //   console.log('OK?')
+  //   // ...
+  // }).catch(function(error) {
+  //   // Handle Errors here.
+  //   var errorCode = error.code;
+  //   var errorMessage = error.message;
+  //   // The email of the user's account used.
+  //   var email = error.email;
+  //   // The firebase.auth.AuthCredential type that was used.
+  //   var credential = error.credential;
+  //   // ...
+  //   console.log('error')
+  // });
+  //
+  // firebase.auth().getRedirectResult().then(function(result) {
+  //   if (result.credential) {
+  //     // This gives you a Google Access Token. You can use it to access the Google API.
+  //     var token = result.credential.accessToken;
+  //     // ...
+  //   }
+  //   // The signed-in user info.
+  //   var user = result.user;
+  // }).catch(function(error) {
+  //   // Handle Errors here.
+  //   var errorCode = error.code;
+  //   var errorMessage = error.message;
+  //   // The email of the user's account used.
+  //   var email = error.email;
+  //   // The firebase.auth.AuthCredential type that was used.
+  //   var credential = error.credential;
+  // // ...
+  // });
+  // }
+  // //Try to initialize Firebase
+  // //var quizRef = firebase.database().ref().child("users/" + Quiz.getUid());
+  // saveEvents = function() {
+  //   var uid = Quiz.getUid();
+  //   var username = Quiz.getUsername();
+  //   var events = Quiz.getListEvents();
+  //
+  //   var userRef = $firebaseArray(firebase.database().ref().child('users/' + uid));
+  //   userRef.$add({
+  //     author: username,
+  //     uid: uid,
+  //     events: events
+  //   })
+  //
+  //   var quizRef = $firebaseArray(firebase.database().ref().child('quiz/'));
+  //   quizRef.$add({
+  //     author: username,
+  //     uid: uid,
+  //     events: events
+  //   })
+  // }
   </script>
 </body>
 </html>
