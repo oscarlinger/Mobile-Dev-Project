@@ -1,420 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="stylesheet" href="node_modules/onsenui/css/onsenui.css"/>
-  <link rel="stylesheet" href="node_modules/onsenui/css/onsen-css-components.css"/>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title>Firebase Test</title>
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="node_modules/onsenui/css/onsenui.css"/>
+	<link rel="stylesheet" href="node_modules/onsenui/css/onsen-css-components.css"/>
 
-  <script src="node_modules/onsenui/js/onsenui.js"></script>
-  <script src="node_modules/jquery/dist/jquery.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYWmQkeSCXE_Po-9UELcOHc0MHSd8kPuI&callback=initMap"
-  async defer></script>
-
-  <!-- Firebase user login -->
-  <script src="node_modules/firebase/firebase.js"></script> <!--src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"-->
-  <script src="node_modules/firebase/firebase-app.js"></script>
-  <script src="node_modules/firebase/firebase-auth.js"></script>
-  <script src="node_modules/firebase/firebase-database.js"></script>
-  <script src="node_modules/firebase/firebase-messaging.js"></script>
-
-  <link rel="apple-touch-startup-image" href="https://previews.123rf.com/images/photobizz/photobizz1211/photobizz121100024/16428232-Forrest-in-autumn-and-sunlight-Stock-Photo.jpg">
-
-  <title>StandsOnCampus</title>
-
-  <!-- set the viewport-->
-  <meta name="viewport" content = "width = device-width, initial-scale = 1.0, minimum-scale = 1, maximum-scale = 1, user-scalable = no" />
-  <meta charset="utf-8">
-
-  <!--Fullscreen mode  http://www.onlywebpro.com/2015/07/19/optimizing-full-screen-mobile-web-app-for-ios/ -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-
-  <!--black status bar-->
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-
-  <!--Launcher icon-->
-  <link rel="apple-touch-icon" href="apple-touch-icon-iphone.png">
-  <link rel="apple-touch-icon" sizes="76x76" href="touch-icon-ipad.png">
-  <link rel="apple-touch-icon" sizes="120x120" href="touch-icon-iphone-retina.png">
-  <link rel="apple-touch-icon" sizes="152x152" href="touch-icon-ipad-retina.png">'
-
-  <!-- Startup image code-->
-  <link rel="apple-touch-startup-image" href="iphone-startup.png">
-  <link rel="apple-touch-startup-image" href="ipad-landscape-startup.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)" />
-  <link rel="apple-touch-startup-image" href="ipad-portrait-startup.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)" />
-</script>
-<style>
-/* Always set the map height explicitly to define the size of the div
-* element that contains the map. */
-@media (display-mode: fullscreen) {
-}
-#map {
-  height: 100%;
-  width:100%
-}
-/* Optional: Makes the sample page fill the window. */
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-/* Always set the map height explicitly to define the size of the div
-* element that contains the map. */
-@media (display-mode: fullscreen) {
-}
-#map {
-  height: 100%;
-  width:100%
-}
-/* Optional: Makes the sample page fill the window. */
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-#title {
-  padding: 5px;
-  border: none;
-  border-bottom: 1px solid lightgray;
-  width: 95%;
-  font-size: 1.3em;
-}
-#description {
-  padding-left: 10px;
-  padding-right: 10px;
-  border: none;
-  width:95%;
-  font-family: sans-serif;
-  font-size: 1.3em;
-  height:auto;
-  overflow: scroll;
-}
-#password {
-  padding: 5px;
-  border: none;
-  border-bottom: 1px solid lightgray;
-  width: 95%;
-  font-size: 1.3em;
-}
-p{
-  font-size:1.3em;
-}
-</style>
+	<script src="node_modules/onsenui/js/onsenui.js"></script>
+	<script src="node_modules/jquery/dist/jquery.js"></script>
 </head>
+
 <body>
 
-<ons-navigator  id="myNavigator" page="map-page"></ons-navigator>
+	<ons-navigator  id="myNavigator" page="map-page"></ons-navigator>
 
-<ons-template id="map-page">
-  <ons-page material>
-    <ons-toolbar>
-      <!--<div class="left"><ons-toolbar-button onclick="login()">Login</ons-toolbar-button></div>-->
-      <div class="center">Stands On Campus</div>
-      <div class="right"><ons-toolbar-button onclick="myNavigator.pushPage('about-page');">About</ons-toolbar-button></div>
-    </ons-toolbar>
-    <div id="map">
-    </div>
-    <ons-fab ripple style="position: absolute;bottom: 60px;right: 40px;" id="createEventButton" onclick="newForm()">
-      <ons-icon
-      icon="md-plus">
-    </ons-icon>
-  </ons-fab>
-</ons-page>
-</ons-template>
+	<ons-template id="map-page">
+	  <ons-page material>
+	    <ons-toolbar>
+	      <!--<div class="left"><ons-toolbar-button onclick="login()">Login</ons-toolbar-button></div>-->
+	      <div class="center">Stands On Campus</div>
+	      <div class="right"><ons-toolbar-button onclick="myNavigator.pushPage('about-page');">About</ons-toolbar-button></div>
+	    </ons-toolbar>
+	    <div id="map">
+	    </div>
+	    <ons-fab ripple style="position: absolute;bottom: 60px;right: 40px;" id="createEventButton" onclick="myNavigator.pushPage('form-page');">
+	      <ons-icon
+	      icon="md-plus">
+	    </ons-icon>
+	  </ons-fab>
+	</ons-page>
+	</ons-template>
 
-<ons-template id="form-page">
-  <ons-page material>
-    <ons-toolbar material>
-      <ons-back-button type="button" id="cancelButton">
-        Back
-      </ons-toolbar>
-      <div style="text-align: center; margin-top: 30px;">
-        <div id="form"style="text-align: center; margin-top: 30px;">
-          <input id="title" placeholder="Title"></input>
-          <br>
-          <input id="password" placeholder="Password for editing"></input>
-          <br>
-          <textarea id="description" rows="5" cols="80" placeholder="Event description"></textarea>
-        </div>
-      </div>
-      <ons-list>
-        <ons-list-item tappable>
-          <label class="left">
-            <ons-input type="checkbox" input-id="coffee" ></ons-input>
-          </label>
-          <label for="check-1" class="center">
-            Coffee
-          </label>
-        </ons-list-item>
-        <ons-list-item tappable>
-          <label class="left">
-            <ons-input type="checkbox" input-id="snack" ></ons-input>
-          </label>
-          <label for="check-2" class="center">
-            Snack
-          </label>
-        </ons-list-item>
-        <ons-button  modifier="large" type="button" onclick="getLocation()">Create Event</ons-button>
-        <ons-button id="deleteButton" modifier="large" type="button" onclick="deleteMarker(id)" modifier="large" disabled="true">Delete Event</ons-button>
-      </ons-list>
-    </ons-page>
-  </ons-template>
+	<ons-template id="form-page">
+	  <ons-page material>
+	    <ons-toolbar material>
+	      <ons-back-button type="button" id="cancelButton">
+	        Back
+	      </ons-toolbar>
+	      <div style="text-align: center; margin-top: 30px;">
+	        <div id="form"style="text-align: center; margin-top: 30px;">
+	          <input id="formTitle" placeholder="Title"></input>
+	          <br>
+	          <input id="formPassword" placeholder="Password for editing"></input>
+	          <br>
+	          <textarea id="formDescription" rows="5" cols="80" placeholder="Event description"></textarea>
+	        </div>
+	      </div>
+	      <ons-list>
+	        <ons-list-item tappable>
+	          <label class="left">
+	            <ons-input type="checkbox" input-id="coffee" ></ons-input>
+	          </label>
+	          <label for="check-1" class="center">
+	            Coffee
+	          </label>
+	        </ons-list-item>
 
-<ons-template id="about-page">
-  <ons-page material>
-    <ons-toolbar material>
-      <div class="left"><ons-back-button>Back</ons-back-button></div>
-      <div class="center">About</div>
-    </ons-toolbar>
-    <p style="padding-left:15px;padding-right:15px;">Here you can find stands on campus where you can talk to people from companies and organisation. <br><br>There may be coffee, snacks or job opportunities available! </p>
-    <p style="padding-left:15px;padding-right:15px;">If you want to put up a stand, go to the map view and press the 'add button' in the down right corner.  </p>
-  </ons-page>
-</ons-template>
+	        <ons-button  modifier="large" type="button" onclick="saveFormInfo()">Create Event</ons-button>
+	      <!--   <ons-button id="deleteButton" modifier="large" type="button" onclick="deleteMarker(id)" modifier="large" >Delete Event</ons-button> -->
+	      </ons-list>
+	    </ons-page>
+	  </ons-template>
 
-<ons-template id="login-page">
-  <ons-page>
-    <ons-toolbar>
-      <ons-back-button class="left"></ons-back-button>
-      <div class="center"> User </div>
-    </ons-toolbar>
-    Example text
-  </ons-page>
-</ons-template>
+	<ons-template id="about-page">
+	  <ons-page material>
+	    <ons-toolbar material>
+	      <div class="left"><ons-back-button>Back</ons-back-button></div>
+	      <div class="center">About</div>
+	    </ons-toolbar>
+	    <p style="padding-left:15px;padding-right:15px;">Here you can find stands on campus where you can talk to people from companies and organisation. <br><br>There may be coffee, snacks or job opportunities available! </p>
+	    <p style="padding-left:15px;padding-right:15px;">If you want to put up a stand, go to the map view and press the 'add button' in the down right corner.  </p>
+	  </ons-page>
+	</ons-template>
 
+<!--
+<div style="text-align: center; margin-top: 30px;">
+	<div id="form" style="text-align: center; margin-top: 30px;">
+      <input id="formTitle" placeholder="Title"></input>
+      <br>
+      <input id="formPassword" placeholder="Password for editing"></input>
+      <br>
+      <textarea id="formDescription" rows="5" cols="80" placeholder="Event description"></textarea>
+	</div>
+	<button id="formCreateBtn" onclick="writeMarkerData()">Create Event</button>
+</div>
+
+<div id="markerDiv">
+	<h3 id="markerTitle"></h3>
+	<p id="markerDescription"></p>
+</div>
+
+<button id="formCreateBtn" onclick="deleteData('2')">Delete</button>-->
+
+
+
+<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
 <script>
-// Google Map
-var map;
-var x = document.getElementById("map");
-var formInfo = {}
 
-var markers = [];
-var uniqueId = 1;
 
-function removeMarker(markerId) {
-    if(markers[markerId]){
-        markers[markerId].setMap(null);
-        delete markers[markerId];
-    }
+
+
+function initMap() {
+	map = new google.maps.Map(document.getElementById('map'), {
+		center: {lat: 59.347106, lng: 18.071965},
+		zoom: 17,
+		mapTypeId: 'hybrid',
+		tilt:45,
+		zoomControl: false,
+		mapTypeControl: false,
+		scaleControl: false,
+		streetViewControl: false,
+		rotateControl: false,
+		fullscreenControl: false
+	});
 }
 
-addMarker = function(marker) {
-  this.markers[this.markers.length] = marker;
-};
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCvBwLaB3vf5755dKqVbOzLoQuMDfFEDzU",
+    authDomain: "test-e12af.firebaseapp.com",
+    databaseURL: "https://test-e12af.firebaseio.com",
+    projectId: "test-e12af",
+    storageBucket: "test-e12af.appspot.com",
+    messagingSenderId: "122637640151"
+  };
+  firebase.initializeApp(config);
+</script>
+	<script src="app.js"></script>
+	<script>
 
-function deleteMarker(id) {
-  //Find and remove the marker from the Array
-  for (var i = 0; i < markers.length; i++) {
-      if (markers[i].id == id) {
-          //Remove the marker from Map
-          markers[i].setMap(null);
-          //Remove the marker from array.
-          markers.splice(i, 1);
-          return;
-      }
-    }
-  }
+	</script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYWmQkeSCXE_Po-9UELcOHc0MHSd8kPuI&callback=initMap"
+	async defer></script>
+	</body>
 
-document.addEventListener('deviceready', function() {
-  StatusBar.overlaysWebView(false);
-  StatusBar.backgroundColorByName('green');
-}, false);
-
-function newForm(){
-  myNavigator.pushPage('form-page');
-  //$('#deleteButton').disabled = false;
-}
-
-// -GET MY POSITION FuNCTION
-function getLocation() {
-  if (document.getElementById('title').value == "") {
-    document.getElementById("title").placeholder = "Title is required*";
-    //HOW TO CHANGE placeholder COLOR TO RED???
-      return; }
-    //go back to map page
-  myNavigator.popPage();
-    var title = document.getElementById('title').value;
-    var password = document.getElementById('password').value;
-    var description = document.getElementById('description').value;
-    if ($('#coffee').prop('checked') == true) {
-      var coffee = '<h4 style="text-align:center;"><ons-icon icon="coffee"></ons-icon> Coffee</h4>';
-    }else{
-      var coffee = "";
-    };
-    if ($('#snack').prop('checked') == true) {
-      var snack = '<h4 style="text-align:center;"><ons-icon icon="ion-android-checkbox"></ons-icon> Snack</h4>';
-    }else{
-      var snack = "";
-    };
-    formInfo = {"title":title, "password":password, "description":description, "coffee":coffee, "snack":snack}
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(createEventMarker);
-    } else {
-      x.innerHTML = "Geolocation is not supported by this browser.";
-    }
-  }
-
-  // CREATE MARKER FOR EVENT
-  function createEventMarker(position) {
-    // http://www.lass.it/Web/viewer.aspx?id=4
-    marker = new google.maps.Marker({
-      map: map,
-      draggable: true,
-      animation: google.maps.Animation.DROP,
-      icon: url="http://maps.google.com/mapfiles/kml/shapes/info.png",
-      position: {lat: position.coords.latitude, lng: position.coords.longitude},
-      title:"Event"
-    });
-    // set unique ID
-    marker.id = uniqueId;
-            uniqueId++;
-      console.log(marker.id);
-    //add marker to markers
-
-    // Change the marker icon depending on the availability of coffee or snacks
-    if (formInfo['coffee'] != '') {
-      marker.setIcon('http://maps.google.com/mapfiles/kml/shapes/coffee.png');
-    };
-    if (formInfo['snack'] != '' && formInfo['coffee'] == '') {
-      marker.setIcon('http://maps.google.com/mapfiles/ms/micons/snack_bar.png');
-    };
-    // Create an infowindow for the marker with information from the form-page
-    map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude} );
-    marker.addListener('click', function(){
-      var contentString =
-      '<h1 style="text-align:center;">'+ formInfo["title"] +'</h1>'+
-      '<p style="overflow:scroll;text-align:center;">'+ formInfo["description"] + '</p>' +
-      formInfo['coffee'] +
-      formInfo['snack'] +
-      '<ons-button modifier="large" onclick="checkPassword(formInfo, ' + marker.id + ')">Edit</ons-button>' +
-      '</div>';
-      var infowindow = new google.maps.InfoWindow({
-        content: contentString
-      });
-      infowindow.open(map, marker);
-    });
-    markers.push(marker);
-  }
-
-  // PASSWORD CHECK FOR EDITING EVENT
-  function checkPassword(fi, id) {
-    var person = prompt("Password",);
-    if (person == fi['password']) {
-      fillForm(fi, id)
-    }
-    else {
-      alert("You need the correct password to edit");
-    }
-  }
-
-  // FILL EDIT-FORM WITH EVENT INFO
-  function fillForm(fi, id){
-    myNavigator.pushPage('form-page');
-    document.addEventListener('init', function(event) {
-      var page = event.target;
-      page.querySelector('#title').value = formInfo["title"];
-      page.querySelector('#password').value = formInfo["password"];
-      page.querySelector('#description').value = formInfo["description"];
-      if (formInfo["coffee"] != "") {
-        page.querySelector('#coffee').checked = true;
-      }
-      if (formInfo["snack"] != "") {
-        page.querySelector('#snack').checked = true;
-      }
-      page.querySelector('#deleteButton').disabled = false;
-    });
-  }
-
-  // MAP Constructor
-  function initMap() {
-    map = new google.maps.Map(document.getElementById('map'), {
-      center: {lat: 59.347106, lng: 18.071965},
-      zoom: 17,
-      mapTypeId: 'hybrid',
-      tilt:45,
-      zoomControl: false,
-      mapTypeControl: false,
-      scaleControl: false,
-      streetViewControl: false,
-      rotateControl: false,
-      fullscreenControl: false
-    });
-  }
-
-  //
-  // // Initialize Firebase
-  // var config = {
-  //   apiKey: "AIzaSyDF_t6AHulQgB54JCXXAlCMDV8-HNnnRq4",
-  //   authDomain: "standsoncampus.firebaseapp.com",
-  //   databaseURL: "https://standsoncampus.firebaseio.com",
-  //   projectId: "standsoncampus",
-  //   storageBucket: "standsoncampus.appspot.com",
-  //   messagingSenderId: "77528318626"
-  // };
-  // firebase.initializeApp(config);
-  //
-  //
-  // login = function() {
-  // myNavigator.pushPage('login-page');
-  //
-  // var provider = new firebase.auth.GoogleAuthProvider();
-  //
-  // firebase.auth().signInWithRedirect(provider).then(function(result) {
-  //   // This gives you a Google Access Token. You can use it to access the Google API.
-  //   var token = result.credential.accessToken;
-  //   // The signed-in user info.
-  //   var user = result.user;
-  //   console.log('OK?')
-  //   // ...
-  // }).catch(function(error) {
-  //   // Handle Errors here.
-  //   var errorCode = error.code;
-  //   var errorMessage = error.message;
-  //   // The email of the user's account used.
-  //   var email = error.email;
-  //   // The firebase.auth.AuthCredential type that was used.
-  //   var credential = error.credential;
-  //   // ...
-  //   console.log('error')
-  // });
-  //
-  // firebase.auth().getRedirectResult().then(function(result) {
-  //   if (result.credential) {
-  //     // This gives you a Google Access Token. You can use it to access the Google API.
-  //     var token = result.credential.accessToken;
-  //     // ...
-  //   }
-  //   // The signed-in user info.
-  //   var user = result.user;
-  // }).catch(function(error) {
-  //   // Handle Errors here.
-  //   var errorCode = error.code;
-  //   var errorMessage = error.message;
-  //   // The email of the user's account used.
-  //   var email = error.email;
-  //   // The firebase.auth.AuthCredential type that was used.
-  //   var credential = error.credential;
-  // // ...
-  // });
-  // }
-  // //Try to initialize Firebase
-  // //var quizRef = firebase.database().ref().child("users/" + Quiz.getUid());
-  // saveEvents = function() {
-  //   var uid = Quiz.getUid();
-  //   var username = Quiz.getUsername();
-  //   var events = Quiz.getListEvents();
-  //
-  //   var userRef = $firebaseArray(firebase.database().ref().child('users/' + uid));
-  //   userRef.$add({
-  //     author: username,
-  //     uid: uid,
-  //     events: events
-  //   })
-  //
-  //   var quizRef = $firebaseArray(firebase.database().ref().child('quiz/'));
-  //   quizRef.$add({
-  //     author: username,
-  //     uid: uid,
-  //     events: events
-  //   })
-  // }
-  </script>
-</body>
 </html>
