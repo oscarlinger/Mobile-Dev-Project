@@ -1,21 +1,10 @@
-
-
-
-
-
 var uniqueId = 1;
-
 
 var myDatabase = firebase.database().ref('Markers/');
 
 
-
 var titleHeader = document.getElementById("markerTitle")
 var descriptionPara = document.getElementById("markerDescription")
-
-list2 = [];
-
-
 
 
 // fireTitle.on('value', function(snapshot){
@@ -28,21 +17,68 @@ list2 = [];
 
 function getDatabaseData() {
 
+	var markers = [];
 	for (i=1;i<uniqueId;i++){
+		var marker = {};
 		var fireTitle = firebase.database().ref('Markers/' + i).child("title");
-		//var fireDesc = firebase.database().ref('Markers/' + i).child("description");
-		list = [];
 		fireTitle.on('value', function(snapshot){
-			console.log(snapshot.val());
-		 	//list.push(snapshot.val());
+		 	marker['title'] = snapshot.val();
 		});
-		 list2.push(list);
-
-
+		var firePass = firebase.database().ref('Markers/' + i).child("password");
+		firePass.on('value', function(snapshot){
+		 	marker['password'] = snapshot.val();
+		});		
+		var fireDesc = firebase.database().ref('Markers/' + i).child("description");
+		fireDesc.on('value', function(snapshot){
+		 	marker['description'] = snapshot.val();
+		});
+		var fireCoffee = firebase.database().ref('Markers/' + i).child("coffee");
+		fireCoffee.on('value', function(snapshot){
+		 	marker['coffee'] = snapshot.val();
+		});
+		var fireLat = firebase.database().ref('Markers/' + i).child("latitude");
+		fireLat.on('value', function(snapshot){
+		 	marker['latitude'] = snapshot.val();
+		});
+		var fireLong = firebase.database().ref('Markers/' + i).child("longitude");
+		fireLong.on('value', function(snapshot){
+		 	marker['longitude'] = snapshot.val();
+		});
+		markers.push(marker);
 	}
+	createAndMapMarkersOnMap(markers);
 }
 
-function deleteData1(id) {
+function createAndMapMarkersOnMap(eventData) {
+	for (i= 0;i< eventData.length;i++){
+
+		marker = new google.maps.Marker({
+      	map: map,
+     	draggable: true,
+     	animation: google.maps.Animation.DROP,
+     	icon: url="http://maps.google.com/mapfiles/kml/shapes/info.png",
+     	position: {lat: eventData[i]['latitude'], lng: eventData[i]['longitude']},
+     	title:eventData[i]['title']
+    });
+		marker.addListener('click', function(){
+
+	      var contentString = '';
+	      // '<h1 style="text-align:center;">'+ eventData[i]['title'] +'</h1>'+
+	      // '<p style="overflow:scroll;text-align:center;">'+ eventData[i]['description'] + '</p>' +
+	      // eventData[i]['coffee'] +
+	      // //'<ons-button modifier="large" onclick="checkPassword(formInfo, ' + marker.id + ')">Edit</ons-button>' +
+	      // '</div>';
+	      var infowindow = new google.maps.InfoWindow({
+	        content: contentString
+	      });
+	      infowindow.open(map, marker);
+	  });
+}
+}
+
+
+function deleteData1(id)  {
+
 	firebase.database().ref('Markers/'+ id).remove();
 }
 
@@ -75,25 +111,25 @@ getLocation();
 	    } else {
 				alert("error");
 	    }
-			getDatabaseData();
+
+		getDatabaseData();
 	}
 
 	function showPosition(position) {
+			
 	    latitude = position.coords.latitude;
 	    longitude = position.coords.longitude;
+	    
 			firebase.database().ref('Markers/' + markerId).set({
 		    title: title,
 		    password: password,
 		    description : description,
-				coffee: coffee,
-				latitude: longitude,
-				longitude: latitude
+			coffee: coffee,
+			latitude: latitude,
+			longitude: longitude
 		  });
+			
 		}
 
-
-
-
-
-
 }
+
