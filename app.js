@@ -14,9 +14,8 @@ var descriptionPara = document.getElementById("markerDescription")
 // fireDesc.on('value', function(snapshot){
 // 	descriptionPara.innerText = snapshot.val();
 // })
-
+//var markers = [];
 function getDatabaseData() {
-
 	var markers = [];
 	for (i=1;i<uniqueId;i++){
 		var marker = {};
@@ -44,14 +43,15 @@ function getDatabaseData() {
 		fireLong.on('value', function(snapshot){
 		 	marker['longitude'] = snapshot.val();
 		});
+
 		markers.push(marker);
 	}
 	createAndMapMarkersOnMap(markers);
 }
 
+
 function createAndMapMarkersOnMap(eventData) {
 	for (i= 0;i< eventData.length;i++){
-
 		marker = new google.maps.Marker({
       	map: map,
      	draggable: true,
@@ -61,8 +61,7 @@ function createAndMapMarkersOnMap(eventData) {
      	title:eventData[i]['title']
     });
 		marker.addListener('click', function(){
-
-	      var contentString = '';
+	      var contentString = 'hej';
 	      // '<h1 style="text-align:center;">'+ eventData[i]['title'] +'</h1>'+
 	      // '<p style="overflow:scroll;text-align:center;">'+ eventData[i]['description'] + '</p>' +
 	      // eventData[i]['coffee'] +
@@ -78,10 +77,8 @@ function createAndMapMarkersOnMap(eventData) {
 
 
 function deleteData1(id)  {
-
 	firebase.database().ref('Markers/'+ id).remove();
 }
-
 
 function deleteData() {
 	firebase.database().ref('Markers/'+ '1').remove();
@@ -94,8 +91,8 @@ function saveFormInfo() { //Lägger till marker data till databasen
 	var title = document.getElementById("formTitle").value;
 	var password = document.getElementById("formPassword").value;
 	var description = document.getElementById("formDescription").value;
-	var latitude = 0;
-	var longitude = 0;
+	var latitude = 59.35020989999999;
+	var longitude = 18.0693072;
 
 	if ($('#coffee').prop('checked') == true) {
 		var coffee = true;
@@ -104,31 +101,26 @@ function saveFormInfo() { //Lägger till marker data till databasen
 	};
 
 	var x = document.getElementById("map");
-getLocation();
+	getLocation();
 	function getLocation() {
 	    if (navigator.geolocation) {
 	        navigator.geolocation.getCurrentPosition(showPosition);
 	    } else {
 				alert("error");
 	    }
-
-		getDatabaseData();
+		    firebase.database().ref('Markers/' + markerId).set({
+			    title: title,
+			    password: password,
+			    description : description,
+				coffee: coffee,
+				latitude: latitude,
+				longitude: longitude
+			  });
+			getDatabaseData();
 	}
-
 	function showPosition(position) {
-			
 	    latitude = position.coords.latitude;
 	    longitude = position.coords.longitude;
-	    
-			firebase.database().ref('Markers/' + markerId).set({
-		    title: title,
-		    password: password,
-		    description : description,
-			coffee: coffee,
-			latitude: latitude,
-			longitude: longitude
-		  });
-			
 		}
 
 }
