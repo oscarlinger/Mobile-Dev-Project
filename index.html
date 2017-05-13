@@ -12,14 +12,11 @@
 	<script src="node_modules/jquery/dist/jquery.js"></script>
 </head>
 
-<body>
-
+<body onload="getDatabaseData()">
 	<ons-navigator  id="myNavigator" page="map-page"></ons-navigator>
-
 	<ons-template id="map-page">
 	  <ons-page material>
 	    <ons-toolbar>
-	      <!--<div class="left"><ons-toolbar-button onclick="login()">Login</ons-toolbar-button></div>-->
 	      <div class="center">Stands On Campus</div>
 	      <div class="right"><ons-toolbar-button onclick="myNavigator.pushPage('about-page');">About</ons-toolbar-button></div>
 	    </ons-toolbar>
@@ -30,11 +27,6 @@
 	      icon="md-plus">
 	    </ons-icon>
 	  </ons-fab>
-<!-- 	  <ons-fab ripple style="position: absolute;bottom: 60px;right: 150px;" id="createEventButton" onclick="createAndMapMarkersOnMap(markers);">
-	      <ons-icon
-	      icon="md-plus">
-	    </ons-icon>
-	  </ons-fab> -->
 	</ons-page>
 	</ons-template>
 
@@ -63,8 +55,7 @@
 	          </label>
 	        </ons-list-item>
 
-	        <ons-button  modifier="large" type="button" onclick="saveFormInfo()">Create Event</ons-button>
-	      <!--   <ons-button id="deleteButton" modifier="large" type="button" onclick="deleteMarker(id)" modifier="large" >Delete Event</ons-button> -->
+	        <ons-button  modifier="large" type="button" onclick="saveFormInfo(), myNavigator.popPage();">Create Event</ons-button>
 	      </ons-list>
 	    </ons-page>
 	  </ons-template>
@@ -80,29 +71,8 @@
 	  </ons-page>
 	</ons-template>
 
-<!--
-<div style="text-align: center; margin-top: 30px;">
-	<div id="form" style="text-align: center; margin-top: 30px;">
-      <input id="formTitle" placeholder="Title"></input>
-      <br>
-      <input id="formPassword" placeholder="Password for editing"></input>
-      <br>
-      <textarea id="formDescription" rows="5" cols="80" placeholder="Event description"></textarea>
-	</div>
-	<button id="formCreateBtn" onclick="writeMarkerData()">Create Event</button>
-</div>
-
-<div id="markerDiv">
-	<h3 id="markerTitle"></h3>
-	<p id="markerDescription"></p>
-</div>
-
-<button id="formCreateBtn" onclick="deleteData('2')">Delete</button>-->
-
-
 <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
 <script>
-
 
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
@@ -121,19 +91,24 @@ function initMap() {
 
   // Initialize Firebase
   var config = {
-    apiKey: "AIzaSyCvBwLaB3vf5755dKqVbOzLoQuMDfFEDzU",
-    authDomain: "test-e12af.firebaseapp.com",
-    databaseURL: "https://test-e12af.firebaseio.com",
-    projectId: "test-e12af",
-    storageBucket: "test-e12af.appspot.com",
-    messagingSenderId: "122637640151"
+    // apiKey: "AIzaSyCvBwLaB3vf5755dKqVbOzLoQuMDfFEDzU",
+    // authDomain: "test-e12af.firebaseapp.com",s
+    // databaseURL: "https://test-e12af.firebaseio.com",
+    // projectId: "standsOnC",
+    // storageBucket: "test-e12af.appspot.com",
+    // messagingSenderId: "122637640151"
+    apiKey: "AIzaSyDF_t6AHulQgB54JCXXAlCMDV8-HNnnRq4",
+    authDomain: "standsoncampus.firebaseapp.com",
+    databaseURL: "https://standsoncampus.firebaseio.com",
+    projectId: "standsoncampus",
+    storageBucket: "standsoncampus.appspot.com",
+    messagingSenderId: "77528318626"
   };
   firebase.initializeApp(config);
+
 </script>
 	<script src="app.js"></script>
-	<script>
 
-	</script>
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYWmQkeSCXE_Po-9UELcOHc0MHSd8kPuI&callback=initMap"
 	async defer></script>
 	</body>
