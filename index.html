@@ -11,7 +11,10 @@
 	<script src="node_modules/jquery/dist/jquery.js"></script>
 </head>
 
+<!-- GET AND SAVE FIREBASE DATA ON LOADING PAGE -->
 <body onload="getDatabaseData()">
+
+    <!-- GOOGLE MAP HTML -->
 	<ons-navigator  id="myNavigator" page="map-page"></ons-navigator>
 	<ons-template id="map-page">
 	  <ons-page material>
@@ -21,6 +24,7 @@
 	    </ons-toolbar>
 	    <div id="map">
 	    </div>
+	    <ons-button class="center"> Refresh page </ons-button>
 	    <ons-fab ripple style="position: absolute;bottom: 60px;right: 40px;" id="createEventButton" onclick="myNavigator.pushPage('form-page');">
 	      <ons-icon
 	      icon="md-plus">
@@ -29,6 +33,7 @@
 	</ons-page>
 	</ons-template>
 
+	<!-- FORM PAGE HTML -->
 	<ons-template id="form-page">
 	  <ons-page material>
 	    <ons-toolbar material>
@@ -53,24 +58,27 @@
 	            Coffee
 	          </label>
 	        </ons-list-item>
-	        <ons-button  modifier="large" type="button" onclick="saveFormInfo(), myNavigator.popPage();">Create Event</ons-button>
+	        <ons-button  modifier="large" type="button" onclick="saveFormInfo()">Create Event</ons-button>
 	      </ons-list>
 	    </ons-page>
 	  </ons-template>
 
+	<!-- ABOUT PAGE HTML -->
 	<ons-template id="about-page">
 	  <ons-page material>
 	    <ons-toolbar material>
 	      <div class="left"><ons-back-button>Back</ons-back-button></div>
 	      <div class="center">About</div>
 	    </ons-toolbar>
-	    <p style="padding-left:15px;padding-right:15px;">Here you can find stands on campus where you can talk to people from companies and organisation. <br><br>There may be coffee, snacks or job opportunities available! </p>
-	    <p style="padding-left:15px;padding-right:15px;">If you want to put up a stand, go to the map view and press the 'add button' in the down right corner.  </p>
+	    <p style="padding-left:15px;padding-right:15px;">Here you can find stands on campus where you can talk to people from companies and organisation. <br><br>There may be coffee or job opportunities available! </p>
+	    <p style="padding-left:15px;padding-right:15px;">If you want to put up a stand, go back to the map view and press the '+ button' in the lower right corner.  </p>
 	  </ons-page>
 	</ons-template>
 
 <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
 <script>
+
+// , myNavigator.popPage();
 
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
