@@ -17,7 +17,7 @@ function getDatabaseData() {
              marker.longitude = childSnapshot.val().longitude;
              marker.id = childSnapshot.val().id;
              // SAVE EACH MARKERS TO ARRAY
-            markers.push(marker);  
+            markers.push(marker);
           });
         // SEND, CREATE AND MAP MARKERS ON MAP
   		createAndMapMarkersOnMap(markers);
@@ -37,8 +37,8 @@ function createAndMapMarkersOnMap(eventData) {
 		var id = eventData[i]['id'];
 		// PUT INFORMATION IN INFOWINDOW
 		var contentString ='<h1 style="text-align:center;">'+ title +
-						   '</h1><p style="overflow:auto;text-align:center;">'+ 
-						   description + '</p>' + coffee + 
+						   '</h1><p style="overflow:auto;text-align:center;">'+
+						   description + '</p>' + coffee +
 						   '<ons-button modifier="large" onclick="deleteMarkerData('+id+')">Delete</ons-button></div>';
 		// CREATE MARKER
 		marker = new google.maps.Marker({
@@ -53,7 +53,7 @@ function createAndMapMarkersOnMap(eventData) {
       marker.setIcon('http://maps.google.com/mapfiles/kml/shapes/coffee.png');
     };
 		// FOCUS MAP ON MARKER POSITION
-		map.setCenter({lat: latitude, lng: longitude} );
+	//	map.setCenter({lat: latitude, lng: longitude} );
 		var infowindow = new google.maps.InfoWindow();
 		// OPEN INFOWINDOW IF MARKER IS CLICKED
 		google.maps.event.addListener(marker, 'click', (function(marker, contentString, infowindow){
@@ -69,7 +69,7 @@ function createAndMapMarkersOnMap(eventData) {
 function deleteMarkerData(id)  {
  	// CHECK PASSWORD
 	var firePass = firebase.database().ref('standsoncampus/' + id).child("password");
- 		firePass.on('value', function(snapshot){
+ 		firePass.once('value', function(snapshot){
  			// DELETE MARKER IF PASSWORD IS CORRECT
  			if (prompt("Password") == snapshot.val()) {
       			firebase.database().ref('standsoncampus/' + id).remove();
@@ -82,7 +82,7 @@ function deleteMarkerData(id)  {
 
 // SEND INFORMATION FROM FORM TO FIREBASE DATABASE
 function saveFormInfo() {
-	// SAVE FORM INFO 
+	// SAVE FORM INFO
 	var title = document.getElementById("formTitle").value;
 	var password = document.getElementById("formPassword").value;
 	var description = document.getElementById("formDescription").value;
@@ -123,4 +123,3 @@ function saveFormInfo() {
  			window.location.reload(true);
 		}
 }
-
