@@ -45,13 +45,13 @@ function createAndMapMarkersOnMap(eventData) {
 	      	map: map,
 	     	draggable: true,
 	     	animation: google.maps.Animation.DROP,
-	     	icon: url="http://maps.google.com/mapfiles/kml/shapes/info.png",
+	     	icon: url="https://maps.google.com/mapfiles/kml/shapes/info.png",
 	     	position: {lat: latitude, lng: longitude},
 	     	title:eventData[i]['title']
     		});
-		if (coffee != '') {
-      marker.setIcon('http://maps.google.com/mapfiles/kml/shapes/coffee.png');
-    };
+		if (coffee !== '') {
+      marker.setIcon('https://maps.google.com/mapfiles/kml/shapes/coffee.png');
+    }
 		// FOCUS MAP ON MARKER POSITION
 	//	map.setCenter({lat: latitude, lng: longitude} );
 		var infowindow = new google.maps.InfoWindow();
@@ -90,11 +90,11 @@ function saveFormInfo() {
 	var latitude = 59.34020989999999;
 	var longitude = 18.0693072;
 	var id = Math.floor(Math.random() * 100000);
-	if ($('#coffee').prop('checked') == true) {
+	if ($('#coffee').prop('checked') === true) {
 		var coffee = '<h4 style="text-align:center;"><ons-icon icon="coffee"></ons-icon> Coffee</h4>';
 	}else{
 		var coffee = '';
-	};
+	}
 	var x = document.getElementById("map");
 	// GET USER POSITION
 	getLocation();
