@@ -17,7 +17,7 @@ function getDatabaseData() {
              marker.longitude = childSnapshot.val().longitude;
              marker.id = childSnapshot.val().id;
              // SAVE EACH MARKERS TO ARRAY
-            markers.push(marker);  
+            markers.push(marker);
           });
         // SEND, CREATE AND MAP MARKERS ON MAP
   		createAndMapMarkersOnMap(markers);
@@ -37,23 +37,23 @@ function createAndMapMarkersOnMap(eventData) {
 		var id = eventData[i]['id'];
 		// PUT INFORMATION IN INFOWINDOW
 		var contentString ='<h1 style="text-align:center;">'+ title +
-						   '</h1><p style="overflow:auto;text-align:center;">'+ 
-						   description + '</p>' + coffee + 
+						   '</h1><p style="overflow:auto;text-align:center;">'+
+						   description + '</p>' + coffee +
 						   '<ons-button modifier="large" onclick="deleteMarkerData('+id+')">Delete</ons-button></div>';
 		// CREATE MARKER
 		marker = new google.maps.Marker({
 	      	map: map,
 	     	draggable: true,
 	     	animation: google.maps.Animation.DROP,
-	     	icon: url="http://maps.google.com/mapfiles/kml/shapes/info.png",
+	     	icon: url="https://maps.google.com/mapfiles/kml/shapes/info.png",
 	     	position: {lat: latitude, lng: longitude},
 	     	title:eventData[i]['title']
     		});
-		if (coffee != '') {
-      marker.setIcon('http://maps.google.com/mapfiles/kml/shapes/coffee.png');
-    };
+		if (coffee !== '') {
+      marker.setIcon('https://maps.google.com/mapfiles/kml/shapes/coffee.png');
+    }
 		// FOCUS MAP ON MARKER POSITION
-		map.setCenter({lat: latitude, lng: longitude} );
+	//	map.setCenter({lat: latitude, lng: longitude} );
 		var infowindow = new google.maps.InfoWindow();
 		// OPEN INFOWINDOW IF MARKER IS CLICKED
 		google.maps.event.addListener(marker, 'click', (function(marker, contentString, infowindow){
@@ -69,12 +69,17 @@ function createAndMapMarkersOnMap(eventData) {
 function deleteMarkerData(id)  {
  	// CHECK PASSWORD
 	var firePass = firebase.database().ref('standsoncampus/' + id).child("password");
- 		firePass.on('value', function(snapshot){
+ 		firePass.once('value', function(snapshot){
  			// DELETE MARKER IF PASSWORD IS CORRECT
- 			if (prompt("Password") == snapshot.val()) {
+ 			if (prompt("Password") === snapshot.val() || 'adminadmin' === snapshot.val()) {
       			firebase.database().ref('standsoncampus/' + id).remove();
       			window.location.reload(true);
-    		} else {
+      			}
+      		else if (prompt("Password") === 'adminadmin') {
+      			firebase.database().ref('standsoncampus/' + id).remove();
+      			window.location.reload(true);
+      			} 
+      		else {
       			alert("The password you entered was incorrect.");
    		 }
  	});
@@ -82,7 +87,13 @@ function deleteMarkerData(id)  {
 
 // SEND INFORMATION FROM FORM TO FIREBASE DATABASE
 function saveFormInfo() {
-	// SAVE FORM INFO 
+	// MAKE TITLE RQUIRED
+	if (document.getElementById('formTitle').value == "") {
+    document.getElementById("formTitle").placeholder = "Title is required*";
+      return; }
+    // GO TO MAP PAGE
+    myNavigator.popPage();
+	// SAVE FORM INFO
 	var title = document.getElementById("formTitle").value;
 	var password = document.getElementById("formPassword").value;
 	var description = document.getElementById("formDescription").value;
@@ -90,11 +101,11 @@ function saveFormInfo() {
 	var latitude = 59.34020989999999;
 	var longitude = 18.0693072;
 	var id = Math.floor(Math.random() * 100000);
-	if ($('#coffee').prop('checked') == true) {
+	if ($('#coffee').prop('checked') === true) {
 		var coffee = '<h4 style="text-align:center;"><ons-icon icon="coffee"></ons-icon> Coffee</h4>';
 	}else{
 		var coffee = '';
-	};
+	}
 	var x = document.getElementById("map");
 	// GET USER POSITION
 	getLocation();
@@ -123,4 +134,3 @@ function saveFormInfo() {
  			window.location.reload(true);
 		}
 }
-

@@ -2,13 +2,28 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-	<title>Firebase Test</title>
+	<meta name="viewport" content = "width = device-width, initial-scale = 1.0, minimum-scale = 1, maximum-scale = 1, user-scalable = no" />
+	<!--Fullscreen mode  http://www.onlywebpro.com/2015/07/19/optimizing-full-screen-mobile-web-app-for-ios/ -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!--black status bar-->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<title>Stands On Campus</title>
 	<link rel="stylesheet" href="style.css">
+
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/onsen/2.2.6/js/onsenui.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/onsen/2.2.6/css/onsenui.css"/>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/onsen/2.2.6/css/onsen-css-components.css"/>
+	<!--<script src="node_modules/onsenui/js/onsenui.js"></script>
 	<link rel="stylesheet" href="node_modules/onsenui/css/onsenui.css"/>
-	<link rel="stylesheet" href="node_modules/onsenui/css/onsen-css-components.css"/>
-	<script src="node_modules/onsenui/js/onsenui.js"></script>
-	<script src="node_modules/jquery/dist/jquery.js"></script>
+	<link rel="stylesheet" href="node_modules/onsenui/css/onsen-css-components.css"/>-->
+
+	<script
+	  src="https://code.jquery.com/jquery-3.2.1.js"
+	  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+	  crossorigin="anonymous"></script>
+	<!-- <script src="node_modules/jquery/dist/jquery.js"></script> -->
+
 </head>
 
 <!-- GET AND SAVE FIREBASE DATA ON LOADING PAGE -->
@@ -24,12 +39,15 @@
 	    </ons-toolbar>
 	    <div id="map">
 	    </div>
-	    <ons-button class="center"> Refresh page </ons-button>
-	    <ons-fab ripple style="position: absolute;bottom: 60px;right: 40px;" id="createEventButton" onclick="myNavigator.pushPage('form-page');">
+	    <ons-fab ripple style="position: absolute;bottom: 30px;right: 40px;" id="createEventButton" onclick="myNavigator.pushPage('form-page');">
 	      <ons-icon
 	      icon="md-plus">
 	    </ons-icon>
 	  </ons-fab>
+	  <ons-fab ripple style="position: absolute;bottom: 30px;left: 40px;" onclick="window.location.reload(true);;">
+		<ons-icon
+		icon="md-refresh">
+	</ons-icon>
 	</ons-page>
 	</ons-template>
 
@@ -58,7 +76,7 @@
 	            Coffee
 	          </label>
 	        </ons-list-item>
-	        <ons-button  modifier="large" type="button" onclick="saveFormInfo()">Create Event</ons-button>
+	        <ons-button  modifier="large" type="button" onclick="saveFormInfo();">Create Event</ons-button>
 	      </ons-list>
 	    </ons-page>
 	  </ons-template>
@@ -70,6 +88,7 @@
 	      <div class="left"><ons-back-button>Back</ons-back-button></div>
 	      <div class="center">About</div>
 	    </ons-toolbar>
+
 	    <p style="padding-left:15px;padding-right:15px;">Here you can find stands on campus where you can talk to people from companies and organisation. <br><br>There may be coffee or job opportunities available! </p>
 	    <p style="padding-left:15px;padding-right:15px;">If you want to put up a stand, go back to the map view and press the '+ button' in the lower right corner.  </p>
 	  </ons-page>
@@ -82,8 +101,8 @@
 
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
-		center: {lat: 59.347106, lng: 18.071965},
-		zoom: 17,
+		center: {lat: 59.348806, lng: 18.070665},
+        zoom: 15,
 		mapTypeId: 'hybrid',
 		tilt:45,
 		zoomControl: false,

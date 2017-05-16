@@ -43,3 +43,7 @@ html, body {
 p{
   font-size:1.3em;
 }
+img {
+  width:100%;
+  height: auto;
+}
