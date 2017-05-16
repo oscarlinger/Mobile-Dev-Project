@@ -87,12 +87,15 @@ function deleteMarkerData(id)  {
 
 // SEND INFORMATION FROM FORM TO FIREBASE DATABASE
 function saveFormInfo() {
+<<<<<<< HEAD
 	// MAKE TITLE RQUIRED
 	if (document.getElementById('formTitle').value == "") {
     document.getElementById("formTitle").placeholder = "Title is required*";
       return; }
     // GO TO MAP PAGE
     myNavigator.popPage();
+=======
+>>>>>>> 34efd1387e7be26831c71fbf8d7fd33a3c6dbafa
 	// SAVE FORM INFO
 	var title = document.getElementById("formTitle").value;
 	var password = document.getElementById("formPassword").value;
