@@ -70,16 +70,18 @@ function deleteMarkerData(id)  {
  	// CHECK PASSWORD
 	var firePass = firebase.database().ref('standsoncampus/' + id).child("password");
  		firePass.once('value', function(snapshot){
+ 		    var input = prompt("Password");
  			// DELETE MARKER IF PASSWORD IS CORRECT
- 			if (prompt("Password") === snapshot.val() || 'adminadmin' === snapshot.val()) {
+ 			if (input == snapshot.val()) {
       			firebase.database().ref('standsoncampus/' + id).remove();
       			window.location.reload(true);
-      			}
-      		else if (prompt("Password") === 'adminadmin') {
+ 			}
+ 			// MAKE ADMIN RIGHTS TO DELETE MARKERS
+      		else if (input === "adminadmin") {
       			firebase.database().ref('standsoncampus/' + id).remove();
       			window.location.reload(true);
       			} 
-      		else {
+    		else {
       			alert("The password you entered was incorrect.");
    		 }
  	});
@@ -87,15 +89,12 @@ function deleteMarkerData(id)  {
 
 // SEND INFORMATION FROM FORM TO FIREBASE DATABASE
 function saveFormInfo() {
-<<<<<<< HEAD
-	// MAKE TITLE RQUIRED
-	if (document.getElementById('formTitle').value == "") {
+    // MAKE TITLE REQUIRED
+	if (document.getElementById('formTitle').value === "") {
     document.getElementById("formTitle").placeholder = "Title is required*";
       return; }
     // GO TO MAP PAGE
     myNavigator.popPage();
-=======
->>>>>>> 34efd1387e7be26831c71fbf8d7fd33a3c6dbafa
 	// SAVE FORM INFO
 	var title = document.getElementById("formTitle").value;
 	var password = document.getElementById("formPassword").value;
